@@ -41,13 +41,22 @@ class CMorceau:
                 elif self.direction == ENUM_DIR.DROITE: # 7
                     morceau_precedent.face[ENUM_DIR.DROITE] = 0
                     morceau_precedent.face[ENUM_DIR.HAUT] = mp_gauche
-                    morceau_precedent.face[ENUM_DIR.CACHE] = autre_cote(mp_gauche)
                     
                     # 8
                     self.face[ENUM_DIR.BAS] = mp_droite
                     self.face[ENUM_DIR.GAUCHE] = 0
                     self.face[ENUM_DIR.DROITE] = 3
                     self.face[ENUM_DIR.HAUT] = mp_gauche
+                    
+                elif self.direction == ENUM_DIR.GAUCHE: # 9
+                    morceau_precedent.face[ENUM_DIR.GAUCHE] = 0
+                    morceau_precedent.face[ENUM_DIR.HAUT] = mp_droite
+                    
+                    # 8
+                    self.face[ENUM_DIR.BAS] = mp_gauche
+                    self.face[ENUM_DIR.GAUCHE] = 3
+                    self.face[ENUM_DIR.DROITE] = 0
+                    self.face[ENUM_DIR.HAUT] = mp_droite
                     
             # --- Direction Précédente vers la droite
             elif morceau_precedent.direction == ENUM_DIR.DROITE:
@@ -69,16 +78,71 @@ class CMorceau:
                     self.face[ENUM_DIR.DROITE] = mp_haut
                     self.face[ENUM_DIR.HAUT] = 0
                     
+                elif self.direction == ENUM_DIR.HAUT:
+                    morceau_precedent.face[ENUM_DIR.HAUT] = 0
+                    morceau_precedent.face[ENUM_DIR.DROITE] = mp_bas
+                    
+                    self.face[ENUM_DIR.BAS] = 0
+                    self.face[ENUM_DIR.GAUCHE] = mp_haut
+                    self.face[ENUM_DIR.DROITE] = mp_bas
+                    self.face[ENUM_DIR.HAUT] = 3
+                    
             # --- Direction Précédente vers le bas        
             elif morceau_precedent.direction == ENUM_DIR.BAS:
-                if self.direction == ENUM_DIR.DROITE:
+                if self.direction == ENUM_DIR.BAS:
+                    morceau_precedent.face[ENUM_DIR.BAS] = 0
+                     
+                    self.face[ENUM_DIR.BAS] = 3
+                    self.face[ENUM_DIR.GAUCHE] = mp_gauche
+                    self.face[ENUM_DIR.DROITE] = mp_droite
+                    self.face[ENUM_DIR.HAUT] = 0
+                    
+                elif self.direction == ENUM_DIR.DROITE:
                     morceau_precedent.face[ENUM_DIR.DROITE] = 0
+                    morceau_precedent.face[ENUM_DIR.BAS] = mp_gauche
                      
                     self.face[ENUM_DIR.BAS] = mp_gauche
                     self.face[ENUM_DIR.GAUCHE] = 0
                     self.face[ENUM_DIR.DROITE] = 3
-                    self.face[ENUM_DIR.HAUT] = autre_cote(mp_gauche)
-                                 
+                    self.face[ENUM_DIR.HAUT] = mp_droite
+                    
+                elif self.direction == ENUM_DIR.GAUCHE:
+                    morceau_precedent.face[ENUM_DIR.GAUCHE] = 0
+                    morceau_precedent.face[ENUM_DIR.BAS] = mp_droite
+                    
+                    self.face[ENUM_DIR.BAS] = mp_droite
+                    self.face[ENUM_DIR.GAUCHE] = 3
+                    self.face[ENUM_DIR.DROITE] = 0
+                    self.face[ENUM_DIR.HAUT] = autre_cote(mp_droite)
+                    
+            # --- Direction Précédente vers la gauche        
+            elif morceau_precedent.direction == ENUM_DIR.GAUCHE:
+                if self.direction == ENUM_DIR.BAS:
+                    morceau_precedent.face[ENUM_DIR.BAS] = 0
+                    morceau_precedent.face[ENUM_DIR.GAUCHE] = mp_haut
+                     
+                    self.face[ENUM_DIR.BAS] = 3
+                    self.face[ENUM_DIR.GAUCHE] = mp_haut
+                    self.face[ENUM_DIR.DROITE] = mp_bas
+                    self.face[ENUM_DIR.HAUT] = 0
+                    
+                elif self.direction == ENUM_DIR.GAUCHE:
+                    morceau_precedent.face[ENUM_DIR.GAUCHE] = 0
+                     
+                    self.face[ENUM_DIR.BAS] = mp_bas
+                    self.face[ENUM_DIR.GAUCHE] = 3
+                    self.face[ENUM_DIR.DROITE] = 0
+                    self.face[ENUM_DIR.HAUT] = mp_haut
+                
+                elif self.direction == ENUM_DIR.HAUT:
+                    morceau_precedent.face[ENUM_DIR.HAUT] = 0
+                    morceau_precedent.face[ENUM_DIR.GAUCHE] = mp_bas
+                     
+                    self.face[ENUM_DIR.BAS] = 0
+                    self.face[ENUM_DIR.GAUCHE] = mp_bas
+                    self.face[ENUM_DIR.DROITE] = mp_haut
+                    self.face[ENUM_DIR.HAUT] = 3
+                    
         else:
             if direction == ENUM_DIR.HAUT:
                 self.face[ENUM_DIR.BAS] = 0
