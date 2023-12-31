@@ -1,7 +1,7 @@
 
 
-resolution_x, resolution_y = 1024, 768
-cellule = 8
+resolution_x, resolution_y = 1600, 1000
+cellule = 24
 
 
 
