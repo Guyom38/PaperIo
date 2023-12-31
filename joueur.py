@@ -11,7 +11,7 @@ class CJoueur:
         self.couleur = (255, 255, 0)
         self.ecriture = pygame.font.SysFont('arial', 10) 
         
-        self.CORPS = CCorps()
+        self.CORPS = CCorps(moteur)
         
     def afficher(self):
         for index, element in enumerate(self.CORPS.elements):
@@ -44,10 +44,10 @@ class CJoueur:
             image_texte = self.ecriture.render(str(element.direction), True, (0,0,0)) 
             VAR.fenetre.blit(image_texte, (xc + ((VAR.cellule - image_texte.get_width()) // 2), yc + ((VAR.cellule - image_texte.get_height()) // 2)))
            
-        
-        #xc, yc = self.x * VAR.cellule, self.y * VAR.cellule    
-        #pygame.draw.rect(VAR.fenetre, (255, 255, 0), (xc, yc, VAR.cellule, VAR.cellule), 0)    
-        #pygame.draw.rect(VAR.fenetre, (128, 128, 0), (xc, yc, VAR.cellule, VAR.cellule), 2)    
+ 
+        xc, yc = self.CORPS.LIMITE.x * VAR.cellule, self.CORPS.LIMITE.y * VAR.cellule    
+        pygame.draw.rect(VAR.fenetre, (255, 255, 0), (xc, yc, VAR.cellule, VAR.cellule), 0)    
+        pygame.draw.rect(VAR.fenetre, (128, 128, 0), (xc, yc, VAR.cellule, VAR.cellule), 2)    
         
         
         

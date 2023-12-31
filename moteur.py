@@ -44,7 +44,6 @@ class CMoteur:
         x, y = self.JOUEUR.x, self.JOUEUR.y
         pixel = image.get_at( (x, y) )                                
         while not pixel == (255, 0, 0, 255): # trouve le cul
-            print("Bleu " + str( (x, y) ))
             for xd, yd in ( (0, 1), (1, 0), (0, -1), (-1, 0) ):
                 if 0 <= (x + xd) < image.get_width() and 0 <= (y + yd) < image.get_height():
                     pixel = image.get_at( (x + xd, y + yd) ) 
