@@ -10,18 +10,16 @@ class CMorceau:
         self.direction = direction
         
         self.face = {dir: 0 for dir in [ENUM_DIR.BAS, ENUM_DIR.GAUCHE, ENUM_DIR.DROITE, ENUM_DIR.HAUT]}
-
-        
-            
             
         # 0 -> lien entre morceau
         # 1 -> cote 1
         # 2 -> cote 2
         # 3 -> indefini pour l'instant
-          
+        
         if not morceau_precedent == None:
             face_ref = morceau_precedent.face.copy()                  
             morceau_precedent.face[self.direction] = 0 
+            
             # --- Direction Précédente vers le haut
             if morceau_precedent.direction == ENUM_DIR.HAUT:
                 if self.direction == ENUM_DIR.HAUT: # 4
@@ -30,7 +28,7 @@ class CMorceau:
                     self.face[ENUM_DIR.BAS] = 0
                     self.face[ENUM_DIR.GAUCHE] = face_ref[ENUM_DIR.GAUCHE]
                     self.face[ENUM_DIR.DROITE] = face_ref[ENUM_DIR.DROITE]
-                    self.face[ENUM_DIR.HAUT] = face_ref[ENUM_DIR.HAUT]
+                    self.face[ENUM_DIR.HAUT] = 3
                     
                 elif self.direction == ENUM_DIR.DROITE: # 7
                     #morceau_precedent.face[ENUM_DIR.DROITE] = 0
@@ -162,45 +160,55 @@ class CMorceau:
 
                     
 class CBord:
-    def __init__(self):
+    def __init__(self, x, y, dim_x, dim_y):
         # Initialement, la référence est définie à une valeur élevée pour être sûre qu'elle sera mise à jour
-        self.reference = float('inf')
+        self.reference = -1
         self.face = ENUM_DIR.AUCUN
-        self.x, self.y = 0, 0
+        
+        self.x, self.y = x, y
+        self.ref_x, self.ref_y = x, y
+        
+        self.dimension_x, self.dimension_y = dim_x, dim_y
+       
     
-    def controle(self, x, y, dim_x, dim_y):
+    def controle(self, x, y):
         # Calcul des distances par rapport à chaque bord
         distances = {
             ENUM_DIR.HAUT: x,
-            ENUM_DIR.BAS: dim_x - x,
+            ENUM_DIR.BAS: self.dimension_x - x,
             ENUM_DIR.GAUCHE: y,
-            ENUM_DIR.DROITE: dim_y - y
+            ENUM_DIR.DROITE: self.dimension_y - y
         }
         
-        for key, value in distances.items():
-            if value < self.reference:
-                self.reference = value
+        cle, distance_bord = min(distances.items(), key=lambda item: item[1])
+        distance = calculer_distance( (x, y), (self.ref_x, self.ref_y) ) 
+       
+        if distance > self.reference:                
+                self.reference = distance
                 self.x, self.y = x, y
-                self.face = key
+                self.face = cle
+            
+  
+                
       
             
             
 class CCorps:
     def __init__(self, moteur):
         self.MOTEUR = moteur
-        
-        
-      
-    def regime(self):
-        self.elements = {}        
-        self.LIMITE = CBord()        
+        self.elements = {}    
         self.id_interieur = 0
-        
-        self.ajouter_morceau( self.MOTEUR.JOUEUR.x , self.MOTEUR.JOUEUR.y, ENUM_DIR.HAUT)  
+        self.LIMITE = CBord(-1, -1, -1, -1)
       
+    def regime(self):   
+        self.elements = {}    
+        self.id_interieur = 0
+        self.LIMITE = CBord(-1, -1, self.MOTEUR.TERRAIN.dimension_x, self.MOTEUR.TERRAIN.dimension_y)  
         
-    def ajouter_morceau(self, x, y, direction = ENUM_DIR.AUCUN):
+       
+    def ajouter_morceau(self, x, y):
         dernier_morceau = None
+        direction = ENUM_DIR.AUCUN
         
         if len(self.elements) > 0:
             dernier_morceau = list(self.elements.values())[-1]
@@ -211,14 +219,14 @@ class CCorps:
                 elif x < xD: direction = ENUM_DIR.GAUCHE
                 elif y > yD: direction = ENUM_DIR.BAS
                 elif y < yD: direction = ENUM_DIR.HAUT
-                else:
-                    direction = ENUM_DIR.AUCUN
-    
+                
+        else:
+            direction = self.MOTEUR.JOUEUR.direction
             
-        nouveau_morceau = CMorceau(x, y, direction, dernier_morceau)
+        nouveau_morceau = CMorceau(x, y, direction, dernier_morceau)       
         self.elements[(x, y)] = nouveau_morceau
         
-        self.LIMITE.controle(x, y, self.MOTEUR.TERRAIN.dimension_x, self.MOTEUR.TERRAIN.dimension_y)        
+        self.LIMITE.controle(x, y)        
         self.id_interieur = self.trouve_face_interieur()
         
     
