@@ -23,7 +23,8 @@ class CMoteur:
         self.JOUEUR = CJoueur(self)
 
     def demarrer(self):
-        self.charger_terrain()
+        #self.charger_terrain()
+        self.JOUEUR.creer_la_zone_de_depart()
         
         VAR.boucle = True
         self.boucle()
@@ -47,7 +48,7 @@ class CMoteur:
             for xd, yd in ( (0, 1), (1, 0), (0, -1), (-1, 0) ):
                 if 0 <= (x + xd) < image.get_width() and 0 <= (y + yd) < image.get_height():
                     pixel = image.get_at( (x + xd, y + yd) ) 
-                    if (pixel == (0, 0, 0, 255) or pixel == (255, 0, 0, 255) ) and not (x + xd, y + yd) in self.JOUEUR.CORPS.elements_id:
+                    if (pixel == (0, 0, 0, 255) or pixel == (255, 0, 0, 255) ) and not (x + xd, y + yd) in self.JOUEUR.CORPS.elements:
                         self.JOUEUR.CORPS.ajouter_morceau( x + xd, y + yd )
                         x, y = x + xd, y + yd
                         break
@@ -61,15 +62,17 @@ class CMoteur:
                     VAR.boucle = False
                
                 if event.type == KEYDOWN:  
-                    if event.key == K_LEFT: print("la touche gauche")
-                    if event.key == K_RIGHT: print("la touche droite")
-                    if event.key == K_UP: print("la touche haut")
-                    if event.key == K_DOWN: print("la touche bas")
+                    if event.key == K_LEFT: self.JOUEUR.direction = ENUM_DIR.GAUCHE
+                    if event.key == K_RIGHT: self.JOUEUR.direction = ENUM_DIR.DROITE
+                    if event.key == K_UP: self.JOUEUR.direction = ENUM_DIR.HAUT
+                    if event.key == K_DOWN: self.JOUEUR.direction = ENUM_DIR.BAS
 
-           
+            self.JOUEUR.se_deplacer()
+            
             VAR.fenetre.fill((16,16,16))
             self.TERRAIN.afficher()
             self.JOUEUR.afficher()
+           # self.JOUEUR.capture_zone()
            
 
             pygame.display.update()

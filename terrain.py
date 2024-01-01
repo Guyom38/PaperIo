@@ -28,3 +28,10 @@ class CTerrain:
                     pygame.draw.rect(VAR.fenetre, (255, 0, 0), (xc, yc, VAR.cellule, VAR.cellule), 0)                    
                 pygame.draw.rect(VAR.fenetre, (32, 32, 32), (xc, yc, VAR.cellule, VAR.cellule), 1)
                 
+        for x, y in self.MOTEUR.JOUEUR.LISTE_ZONES:
+            xc = x * VAR.cellule
+            yc = y * VAR.cellule
+            
+            pygame.draw.rect(VAR.fenetre, (255, 0, 0), (xc, yc, VAR.cellule, VAR.cellule), 0)      
+            
+                

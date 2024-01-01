@@ -1,6 +1,7 @@
 from constantes import *
 import math
 import variables as VAR
+from fonctions import *
 
 class CMorceau:
     def __init__(self, x, y, direction, morceau_precedent):
@@ -8,10 +9,9 @@ class CMorceau:
         self.y = y
         self.direction = direction
         
-        self.face = {dir: 0 for dir in [ENUM_DIR.BAS, ENUM_DIR.GAUCHE, ENUM_DIR.DROITE, ENUM_DIR.HAUT, ENUM_DIR.CACHE]}
+        self.face = {dir: 0 for dir in [ENUM_DIR.BAS, ENUM_DIR.GAUCHE, ENUM_DIR.DROITE, ENUM_DIR.HAUT]}
 
-        def autre_cote(valeur):
-            return {0: 0, 1: 2, 2: 1}.get(valeur, valeur)
+        
             
             
         # 0 -> lien entre morceau
@@ -21,11 +21,11 @@ class CMorceau:
           
         if not morceau_precedent == None:
             face_ref = morceau_precedent.face.copy()                  
-             
+            morceau_precedent.face[self.direction] = 0 
             # --- Direction Précédente vers le haut
             if morceau_precedent.direction == ENUM_DIR.HAUT:
                 if self.direction == ENUM_DIR.HAUT: # 4
-                    morceau_precedent.face[ENUM_DIR.HAUT] = 0
+                    #morceau_precedent.face[ENUM_DIR.HAUT] = 0
                     
                     self.face[ENUM_DIR.BAS] = 0
                     self.face[ENUM_DIR.GAUCHE] = face_ref[ENUM_DIR.GAUCHE]
@@ -33,7 +33,7 @@ class CMorceau:
                     self.face[ENUM_DIR.HAUT] = face_ref[ENUM_DIR.HAUT]
                     
                 elif self.direction == ENUM_DIR.DROITE: # 7
-                    morceau_precedent.face[ENUM_DIR.DROITE] = 0
+                    #morceau_precedent.face[ENUM_DIR.DROITE] = 0
                     morceau_precedent.face[ENUM_DIR.HAUT] = face_ref[ENUM_DIR.GAUCHE]
                     
                     # 8
@@ -43,7 +43,7 @@ class CMorceau:
                     self.face[ENUM_DIR.HAUT] = face_ref[ENUM_DIR.GAUCHE]
                     
                 elif self.direction == ENUM_DIR.GAUCHE: # 9
-                    morceau_precedent.face[ENUM_DIR.GAUCHE] = 0
+                    #morceau_precedent.face[ENUM_DIR.GAUCHE] = 0
                     morceau_precedent.face[ENUM_DIR.HAUT] = face_ref[ENUM_DIR.DROITE]
                     
                     # 8
@@ -55,7 +55,7 @@ class CMorceau:
             # --- Direction Précédente vers la droite
             elif morceau_precedent.direction == ENUM_DIR.DROITE:
                 if self.direction == ENUM_DIR.DROITE:
-                    morceau_precedent.face[ENUM_DIR.DROITE] = 0
+                    #morceau_precedent.face[ENUM_DIR.DROITE] = 0
                     morceau_precedent.face[ENUM_DIR.HAUT] = face_ref[ENUM_DIR.HAUT]
                     
                     self.face[ENUM_DIR.BAS] = face_ref[ENUM_DIR.BAS]
@@ -64,7 +64,7 @@ class CMorceau:
                     self.face[ENUM_DIR.HAUT] = face_ref[ENUM_DIR.HAUT]
                     
                 elif self.direction == ENUM_DIR.BAS:
-                    morceau_precedent.face[ENUM_DIR.BAS] = 0
+                    #morceau_precedent.face[ENUM_DIR.BAS] = 0
                     morceau_precedent.face[ENUM_DIR.DROITE] = face_ref[ENUM_DIR.HAUT]
                     
                     self.face[ENUM_DIR.BAS] = 3
@@ -73,7 +73,7 @@ class CMorceau:
                     self.face[ENUM_DIR.HAUT] = 0
                     
                 elif self.direction == ENUM_DIR.HAUT:
-                    morceau_precedent.face[ENUM_DIR.HAUT] = 0
+                    #morceau_precedent.face[ENUM_DIR.HAUT] = 0
                     morceau_precedent.face[ENUM_DIR.DROITE] = face_ref[ENUM_DIR.BAS]
                     
                     self.face[ENUM_DIR.BAS] = 0
@@ -84,7 +84,7 @@ class CMorceau:
             # --- Direction Précédente vers le bas        
             elif morceau_precedent.direction == ENUM_DIR.BAS:
                 if self.direction == ENUM_DIR.BAS:
-                    morceau_precedent.face[ENUM_DIR.BAS] = 0
+                    #morceau_precedent.face[ENUM_DIR.BAS] = 0
                      
                     self.face[ENUM_DIR.BAS] = 3
                     self.face[ENUM_DIR.GAUCHE] = face_ref[ENUM_DIR.GAUCHE]
@@ -92,7 +92,7 @@ class CMorceau:
                     self.face[ENUM_DIR.HAUT] = 0
                     
                 elif self.direction == ENUM_DIR.DROITE:
-                    morceau_precedent.face[ENUM_DIR.DROITE] = 0
+                    #morceau_precedent.face[ENUM_DIR.DROITE] = 0
                     morceau_precedent.face[ENUM_DIR.BAS] = face_ref[ENUM_DIR.GAUCHE]
                      
                     self.face[ENUM_DIR.BAS] = face_ref[ENUM_DIR.GAUCHE]
@@ -101,7 +101,7 @@ class CMorceau:
                     self.face[ENUM_DIR.HAUT] = face_ref[ENUM_DIR.DROITE]
                     
                 elif self.direction == ENUM_DIR.GAUCHE:
-                    morceau_precedent.face[ENUM_DIR.GAUCHE] = 0
+                    #morceau_precedent.face[ENUM_DIR.GAUCHE] = 0
                     morceau_precedent.face[ENUM_DIR.BAS] = face_ref[ENUM_DIR.DROITE]
                     
                     self.face[ENUM_DIR.BAS] = face_ref[ENUM_DIR.DROITE]
@@ -112,7 +112,7 @@ class CMorceau:
             # --- Direction Précédente vers la gauche        
             elif morceau_precedent.direction == ENUM_DIR.GAUCHE:
                 if self.direction == ENUM_DIR.BAS:
-                    morceau_precedent.face[ENUM_DIR.BAS] = 0
+                    #morceau_precedent.face[ENUM_DIR.BAS] = 0
                     morceau_precedent.face[ENUM_DIR.GAUCHE] = face_ref[ENUM_DIR.HAUT]
                      
                     self.face[ENUM_DIR.BAS] = 3
@@ -121,7 +121,7 @@ class CMorceau:
                     self.face[ENUM_DIR.HAUT] = 0
                     
                 elif self.direction == ENUM_DIR.GAUCHE:
-                    morceau_precedent.face[ENUM_DIR.GAUCHE] = 0
+                    #morceau_precedent.face[ENUM_DIR.GAUCHE] = 0
                      
                     self.face[ENUM_DIR.BAS] = face_ref[ENUM_DIR.BAS]
                     self.face[ENUM_DIR.GAUCHE] = 3
@@ -129,7 +129,7 @@ class CMorceau:
                     self.face[ENUM_DIR.HAUT] = face_ref[ENUM_DIR.HAUT]
                 
                 elif self.direction == ENUM_DIR.HAUT:
-                    morceau_precedent.face[ENUM_DIR.HAUT] = 0
+                    #morceau_precedent.face[ENUM_DIR.HAUT] = 0
                     morceau_precedent.face[ENUM_DIR.GAUCHE] = face_ref[ENUM_DIR.BAS]
                      
                     self.face[ENUM_DIR.BAS] = 0
@@ -138,11 +138,28 @@ class CMorceau:
                     self.face[ENUM_DIR.HAUT] = 3
                     
         else:
+            self.face[direction] = 3
+            
             if direction == ENUM_DIR.HAUT:
                 self.face[ENUM_DIR.BAS] = 0
                 self.face[ENUM_DIR.GAUCHE] = 1
                 self.face[ENUM_DIR.DROITE] = 2
-                self.face[ENUM_DIR.HAUT] = 3    
+                
+            elif direction == ENUM_DIR.BAS:
+                self.face[ENUM_DIR.HAUT] = 0
+                self.face[ENUM_DIR.GAUCHE] = 1
+                self.face[ENUM_DIR.DROITE] = 2
+                
+            elif direction == ENUM_DIR.DROITE:
+                self.face[ENUM_DIR.GAUCHE] = 0
+                self.face[ENUM_DIR.HAUT] = 1
+                self.face[ENUM_DIR.BAS] = 2
+                
+            elif direction == ENUM_DIR.GAUCHE:
+                self.face[ENUM_DIR.DROITE] = 0
+                self.face[ENUM_DIR.HAUT] = 1
+                self.face[ENUM_DIR.BAS] = 2
+
                     
 class CBord:
     def __init__(self):
@@ -172,18 +189,23 @@ class CCorps:
     def __init__(self, moteur):
         self.MOTEUR = moteur
         
-        self.elements = []
-        self.elements_id = []
         
-        self.LIMITE = CBord()
+      
+    def regime(self):
+        self.elements = {}        
+        self.LIMITE = CBord()        
+        self.id_interieur = 0
+        
+        self.ajouter_morceau( self.MOTEUR.JOUEUR.x , self.MOTEUR.JOUEUR.y, ENUM_DIR.HAUT)  
+      
         
     def ajouter_morceau(self, x, y, direction = ENUM_DIR.AUCUN):
         dernier_morceau = None
+        
         if len(self.elements) > 0:
-            dernier_morceau = self.elements[-1]
+            dernier_morceau = list(self.elements.values())[-1]
             
-            xD, yD = dernier_morceau.x, dernier_morceau.y
-            
+            xD, yD = dernier_morceau.x, dernier_morceau.y            
             if direction == ENUM_DIR.AUCUN:
                 if x > xD: direction = ENUM_DIR.DROITE
                 elif x < xD: direction = ENUM_DIR.GAUCHE
@@ -194,9 +216,27 @@ class CCorps:
     
             
         nouveau_morceau = CMorceau(x, y, direction, dernier_morceau)
-        self.LIMITE.controle(x, y, self.MOTEUR.TERRAIN.dimension_x, self.MOTEUR.TERRAIN.dimension_y)
-        self.elements.append(nouveau_morceau)
-        self.elements_id.append( (x, y) )
+        self.elements[(x, y)] = nouveau_morceau
+        
+        self.LIMITE.controle(x, y, self.MOTEUR.TERRAIN.dimension_x, self.MOTEUR.TERRAIN.dimension_y)        
+        self.id_interieur = self.trouve_face_interieur()
+        
+    
+    def trouve_faces(self, x, y):
+        faces = []
+        for face, id in self.elements[ (x, y) ].face.items():
+            if id == self.id_interieur:
+                faces.append(face)
+        return faces
+            
+            
+        
+    def trouve_face_interieur(self):
+        element_le_plus_proche_du_bord = self.elements[ (self.LIMITE.x, self.LIMITE.y) ]
+        id_cote = element_le_plus_proche_du_bord.face[self.LIMITE.face]
+        autre_id_cote = autre_cote(id_cote)
+        return autre_id_cote
+
         
         
         
