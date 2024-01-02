@@ -63,8 +63,8 @@ class CMoteur:
  
         
     def demarrer(self):
-        #self.JOUEUR.creer_la_zone_de_depart()
-        self.charger_terrain()
+        self.JOUEUR.creer_la_zone_de_depart()
+        #self.charger_terrain()
         VAR.boucle = True
         self.boucle()
            
@@ -81,10 +81,15 @@ class CMoteur:
                     if event.key == K_RIGHT: self.JOUEUR.direction = ENUM_DIR.DROITE
                     if event.key == K_UP: self.JOUEUR.direction = ENUM_DIR.HAUT
                     if event.key == K_DOWN: self.JOUEUR.direction = ENUM_DIR.BAS
+                    if event.key == K_SPACE: self.JOUEUR.direction = ENUM_DIR.AUCUN
 
-            #self.JOUEUR.se_deplacer()
+            self.JOUEUR.se_deplacer()
+            if self.JOUEUR.mort:
+                self.JOUEUR.creer_la_zone_de_depart()
+                
             
-            VAR.fenetre.fill((16,16,16))
+            
+            
             self.TERRAIN.afficher()
             self.JOUEUR.afficher()
            # self.JOUEUR.capture_zone()

@@ -18,11 +18,15 @@ def calculer_distance(coord1, coord2):
     x2, y2 = coord2
     return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
 
-def colorier(x, y, c):                 
+def colorier(x, y, c, d = 0.001):                 
     xc = (x * VAR.cellule) + (VAR.cellule //2)
     yc = (y * VAR.cellule) + (VAR.cellule //2)
                             
     pygame.draw.circle(VAR.fenetre, c, (xc, yc), VAR.cellule //2, 0)
     pygame.display.update()
-    time.sleep(0.1) 
+    time.sleep(d) 
+    
+class ExceptionType(Exception):
+    def __init__(self, message):
+        super().__init__(message)
 

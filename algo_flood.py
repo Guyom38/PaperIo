@@ -7,33 +7,53 @@ import variables as VAR
 
 class CJoueur:
     class CAlgo_Remplissage:
+        
+        
+            
         def capture_zone(self):
+            
+                
             t = time.time()
             
             liste_zones_a_explorer = set()
             zones_explorees = set()
 
-                 
+            # retourne les directions a explorer autour de la case, du coté interieur !!!     
+            def trouve_faces(x, y):
+                if self.CORPS.id_interieur == 0:
+                    print( str( (self.CORPS.LIMITE.x, self.CORPS.LIMITE.y, self.CORPS.elements[(self.CORPS.LIMITE.x, self.CORPS.LIMITE.y)])) )
+                    raise ExceptionType("L'interieur n'a pas été déterminé.")
+                
+                faces = []
+                for direction, id in self.CORPS.elements[ (x, y) ].face.items():
+                    if id == self.CORPS.id_interieur:
+                        faces.append(direction)
+                return faces    
+            
                 
             def ajouter_zone(x, y):
                 if self.MOTEUR.TERRAIN.est_ce_sur_terrain(x, y):
-                    if (x, y) not in self.LISTE_ZONES:
+                    if (x, y) not in self.LISTE_ZONES: 
                         if (x, y) not in zones_explorees and (x, y) not in liste_zones_a_explorer:
-                            if (x, y) not in self.CORPS.elements :
+                            if (x, y) not in self.CORPS.elements:
                                 liste_zones_a_explorer.add((x, y))
                                 
-                                colorier(x, y, (128,0,0))   
+      
                     
 
-            # Initialisation des zones à explorer            
-            for coord, element in self.CORPS.elements.items():
+            # Initialisation des zones à explorer   
+            #print( str(self.CORPS.elements.keys()))         
+            for coord, _ in self.CORPS.elements.items():
                 x, y = coord
-                for face in self.CORPS.trouve_faces(x, y):
-                    xd, yd = FACES[face]               
+                for face in trouve_faces(x, y):
+                    xd, yd = FACES[face]  
+                    #colorier(x + xd, y + yd, (64,64,64), 0.01)  
                     ajouter_zone(x + xd, y + yd)
 
             # Propagation
+            #print( str(liste_zones_a_explorer))
             while liste_zones_a_explorer:
+                
                 x, y = liste_zones_a_explorer.pop()
                 zones_explorees.add((x, y))
 
@@ -49,4 +69,4 @@ class CJoueur:
             for x, y in zones_explorees:
                 if (x, y) not in self.LISTE_ZONES:
                     self.LISTE_ZONES.append( (x, y) )   
-                    colorier(x, y, (0,128,0))   
+                    #colorier(x, y, (0,128,0), 0.01)   
