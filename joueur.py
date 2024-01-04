@@ -127,144 +127,104 @@ class CJoueur(CJoueur.CAlgo_Remplissage):
                     pygame.draw.rect(VAR.fenetre, (0, 128, 128), (xc, yc, VAR.cellule, d), 0)   
                 if element.face[ENUM_DIR.BAS] == 2:
                     pygame.draw.rect(VAR.fenetre, (0, 128, 128), (xc, yc+VAR.cellule-d, VAR.cellule, d), 0)  
-                     
-    def afficher_demo(self):
-        if len(self.CORPS.elements) > 0:
-          
-            for index, donnees in enumerate(self.CORPS.elements.items()):
-                coord, element = donnees            
-                x, y = coord
-                
-                xc, yc = x * VAR.cellule, y * VAR.cellule
-                pygame.draw.rect(VAR.fenetre, (255, 255, 0), (xc+12, yc+12, VAR.cellule-24, VAR.cellule-24), 0)    
-                
-                
-                self.afficher_faces(element, x, y)
-                    
-                #image_texte = self.ecriture.render(str(len(self.CORPS.elements) - index), True, (0,0,0)) 
-                image_texte = self.ecriture.render(str(element.direction), True, (0,0,0)) 
-                VAR.fenetre.blit(image_texte, (xc + ((VAR.cellule - image_texte.get_width()) // 2), yc + ((VAR.cellule - image_texte.get_height()) // 2)))
-
-                image_texte = self.ecriture8.render(str(element.face[ENUM_DIR.HAUT]), True, (255,255,255)) 
-                VAR.fenetre.blit(image_texte, (xc + ((VAR.cellule - image_texte.get_width()) // 2), yc -8 + ((VAR.cellule - image_texte.get_height()) // 2)))
-
-                image_texte = self.ecriture8.render(str(element.face[ENUM_DIR.BAS]), True, (255,255,255)) 
-                VAR.fenetre.blit(image_texte, (xc + ((VAR.cellule - image_texte.get_width()) // 2), yc +8 + ((VAR.cellule - image_texte.get_height()) // 2)))
-
-                image_texte = self.ecriture8.render(str(element.face[ENUM_DIR.GAUCHE]), True, (255,255,255)) 
-                VAR.fenetre.blit(image_texte, (xc + ((VAR.cellule - image_texte.get_width()) // 2) - 8, yc + ((VAR.cellule - image_texte.get_height()) // 2)))
-
-                image_texte = self.ecriture8.render(str(element.face[ENUM_DIR.DROITE]), True, (255,255,255)) 
-                VAR.fenetre.blit(image_texte, (xc + ((VAR.cellule - image_texte.get_width()) // 2) + 8, yc + ((VAR.cellule - image_texte.get_height()) // 2)))
-                
-        #xc, yc = self.x * VAR.cellule, self.y * VAR.cellule       
-        #pygame.draw.rect(VAR.fenetre, (255, 255, 0), (xc, yc, VAR.cellule, VAR.cellule), 0)    
-        
-        if not (-1, -1) == (self.CORPS.LIMITE.x, self.CORPS.LIMITE.y): 
-            couleur = (0,0,255) if self.CORPS.id_interieur == 1 else (0,128,128)    
-            xc, yc = self.CORPS.LIMITE.x * VAR.cellule, self.CORPS.LIMITE.y * VAR.cellule       
-            pygame.draw.rect(VAR.fenetre, couleur, (xc, yc, VAR.cellule, VAR.cellule), 4)   
-            
-            
-            
-            
-            image_texte = self.ecriture30.render(str("INTERIEUR"), True, couleur, (32, 32, 32)) 
-            VAR.fenetre.blit(image_texte, (0, 0))
+           
        
         
-    def afficher(self):
-        
-        cles = list(self.CORPS.elements.keys())  
-        cles.append( (self.x, self.y))        
-        for index, coord in enumerate(cles):           
-            bout_x, bout_y = coord
+    def afficher(self, i):
+        if i == 0:
+            cles = list(self.CORPS.elements.keys())  
+            cles.append( (self.x, self.y))        
+            for index, coord in enumerate(cles):           
+                bout_x, bout_y = coord
 
-            if index < len(cles)-1:
-                devant_x, devant_y = cles[index+1]
-                derriere_x, derriere_y = (-1, -1) if index-1 < 0 else cles[index-1]
-                
-                sens_derriere = ENUM_DIR.AUCUN
-                if derriere_x > -1 or derriere_y > -1:
-                    if derriere_x < bout_x: sens_derriere = ENUM_DIR.DROITE
-                    elif derriere_x > bout_x: sens_derriere = ENUM_DIR.GAUCHE
-                    elif derriere_y < bout_y: sens_derriere = ENUM_DIR.BAS
-                    elif derriere_y > bout_y: sens_derriere = ENUM_DIR.HAUT
+                if index < len(cles)-1:
+                    devant_x, devant_y = cles[index+1]
+                    derriere_x, derriere_y = (-1, -1) if index-1 < 0 else cles[index-1]
                     
-                sens_devant = ENUM_DIR.AUCUN
-                if devant_x > bout_x: sens_devant = ENUM_DIR.DROITE
-                elif devant_x < bout_x: sens_devant = ENUM_DIR.GAUCHE
-                elif devant_y > bout_y: sens_devant = ENUM_DIR.BAS
-                elif devant_y < bout_y: sens_devant = ENUM_DIR.HAUT
-                
-                image = self.images['corps']
-                if sens_derriere == ENUM_DIR.DROITE: 
-                    if sens_devant == ENUM_DIR.BAS: 
-                        image = self.images['angle1']
-                    elif sens_devant == ENUM_DIR.HAUT: 
-                        image = self.images['angle3']
-                elif sens_derriere == ENUM_DIR.GAUCHE: 
-                    if sens_devant == ENUM_DIR.BAS: 
-                        image = self.images['angle7']
-                    elif sens_devant == ENUM_DIR.HAUT: 
-                        image = self.images['angle9']
-                elif sens_derriere == ENUM_DIR.HAUT: 
-                    if sens_devant == ENUM_DIR.DROITE: 
-                        image = self.images['angle7']
-                    elif sens_devant == ENUM_DIR.GAUCHE: 
-                        image = self.images['angle1']
-                elif sens_derriere == ENUM_DIR.BAS: 
-                    if sens_devant == ENUM_DIR.DROITE: 
-                        image = self.images['angle9']
-                    elif sens_devant == ENUM_DIR.GAUCHE: 
-                        image = self.images['angle3']
+                    sens_derriere = ENUM_DIR.AUCUN
+                    if derriere_x > -1 or derriere_y > -1:
+                        if derriere_x < bout_x: sens_derriere = ENUM_DIR.DROITE
+                        elif derriere_x > bout_x: sens_derriere = ENUM_DIR.GAUCHE
+                        elif derriere_y < bout_y: sens_derriere = ENUM_DIR.BAS
+                        elif derriere_y > bout_y: sens_derriere = ENUM_DIR.HAUT
                         
-                offset_y = 0
-
-            else:
-                image = self.images['tete']
-                offset_y = VAR.taille_tete
-            
-            x, y = (bout_x * VAR.cellule),  (bout_y * VAR.cellule) - offset_y
-            VAR.fenetre.blit( image, (x, y) )
-        
-        return    
-        if len(self.CORPS.elements) > 0:
-          
-            for index, donnees in enumerate(self.CORPS.elements.items()):
-                coord, element = donnees            
-                x, y = coord
-                
-                xc, yc = x * VAR.cellule, y * VAR.cellule
-                pygame.draw.rect(VAR.fenetre, (255, 255, 0), (xc, yc, VAR.cellule, VAR.cellule), 0)    
-                
-                
-                self.afficher_faces(element, x, y)
+                    sens_devant = ENUM_DIR.AUCUN
+                    if devant_x > bout_x: sens_devant = ENUM_DIR.DROITE
+                    elif devant_x < bout_x: sens_devant = ENUM_DIR.GAUCHE
+                    elif devant_y > bout_y: sens_devant = ENUM_DIR.BAS
+                    elif devant_y < bout_y: sens_devant = ENUM_DIR.HAUT
                     
-                #image_texte = self.ecriture.render(str(len(self.CORPS.elements) - index), True, (0,0,0)) 
-                image_texte = self.ecriture.render(str(element.direction), True, (0,0,0)) 
-                VAR.fenetre.blit(image_texte, (xc + ((VAR.cellule - image_texte.get_width()) // 2), yc + ((VAR.cellule - image_texte.get_height()) // 2)))
+                    image = self.images['corps']
+                    if sens_derriere == ENUM_DIR.DROITE: 
+                        if sens_devant == ENUM_DIR.BAS: 
+                            image = self.images['angle1']
+                        elif sens_devant == ENUM_DIR.HAUT: 
+                            image = self.images['angle3']
+                    elif sens_derriere == ENUM_DIR.GAUCHE: 
+                        if sens_devant == ENUM_DIR.BAS: 
+                            image = self.images['angle7']
+                        elif sens_devant == ENUM_DIR.HAUT: 
+                            image = self.images['angle9']
+                    elif sens_derriere == ENUM_DIR.HAUT: 
+                        if sens_devant == ENUM_DIR.DROITE: 
+                            image = self.images['angle7']
+                        elif sens_devant == ENUM_DIR.GAUCHE: 
+                            image = self.images['angle1']
+                    elif sens_derriere == ENUM_DIR.BAS: 
+                        if sens_devant == ENUM_DIR.DROITE: 
+                            image = self.images['angle9']
+                        elif sens_devant == ENUM_DIR.GAUCHE: 
+                            image = self.images['angle3']
+                            
+                    offset_y = 0
 
+                else:
+                    image = self.images['tete']
+                    offset_y = VAR.taille_tete
                 
-        xc, yc = self.x * VAR.cellule, self.y * VAR.cellule       
-        pygame.draw.rect(VAR.fenetre, (255, 255, 0), (xc, yc, VAR.cellule, VAR.cellule), 0)    
-
-        if not (-1, -1) == (self.CORPS.LIMITE.x, self.CORPS.LIMITE.y): 
-            couleur = (0,0,255) if self.CORPS.id_interieur == 1 else (0,128,128)    
-            xc, yc = self.CORPS.LIMITE.x * VAR.cellule, self.CORPS.LIMITE.y * VAR.cellule       
-            pygame.draw.rect(VAR.fenetre, couleur, (xc, yc, VAR.cellule, VAR.cellule), 8)    
+                x, y = (bout_x * VAR.cellule),  (bout_y * VAR.cellule) - offset_y
+                VAR.fenetre.blit( image, (x, y) )
             
-            d = 4
-            if self.CORPS.LIMITE.face == ENUM_DIR.DROITE:
-                pygame.draw.rect(VAR.fenetre, (0, 0, 255), (xc+ VAR.cellule-d, yc, d, VAR.cellule), 0)   
-            elif self.CORPS.LIMITE.face == ENUM_DIR.GAUCHE:
-                pygame.draw.rect(VAR.fenetre, (0, 0, 255), (xc, yc, d, VAR.cellule), 0)   
-            elif self.CORPS.LIMITE.face == ENUM_DIR.HAUT:
-                pygame.draw.rect(VAR.fenetre, (0, 0, 255), (xc, yc, VAR.cellule, d), 0)   
-            elif self.CORPS.LIMITE.face == ENUM_DIR.BAS:
-                pygame.draw.rect(VAR.fenetre, (0, 0, 255), (xc, yc+VAR.cellule-d, VAR.cellule, d), 0)   
+        else:    
+            self.CORPS.id_interieur = self.CORPS.trouve_face_interieur()
+            if len(self.CORPS.elements) > 0:
+            
+                for index, donnees in enumerate(self.CORPS.elements.items()):
+                    coord, element = donnees            
+                    x, y = coord
+                    
+                    xc, yc = x * VAR.cellule, y * VAR.cellule
+                    pygame.draw.rect(VAR.fenetre, (255, 255, 0), (xc, yc, VAR.cellule, VAR.cellule), 0)    
+                    
+                    
+                    self.afficher_faces(element, x, y)
+                        
+                    #image_texte = self.ecriture.render(str(len(self.CORPS.elements) - index), True, (0,0,0)) 
+                    image_texte = self.ecriture.render(str(element.direction), True, (0,0,0)) 
+                    VAR.fenetre.blit(image_texte, (xc + ((VAR.cellule - image_texte.get_width()) // 2), yc + ((VAR.cellule - image_texte.get_height()) // 2)))
+
+                    
+            xc, yc = self.x * VAR.cellule, self.y * VAR.cellule       
+            pygame.draw.rect(VAR.fenetre, (255, 255, 0), (xc, yc, VAR.cellule, VAR.cellule), 0)    
+
+            if not (-1, -1) == (self.CORPS.LIMITE.x, self.CORPS.LIMITE.y): 
+                couleur = (0,0,255) if self.CORPS.id_interieur == 1 else (0,128,128)    
+                xc, yc = self.CORPS.LIMITE.x * VAR.cellule, self.CORPS.LIMITE.y * VAR.cellule       
+                pygame.draw.rect(VAR.fenetre, couleur, (xc, yc, VAR.cellule, VAR.cellule), 8)    
                 
-            image_texte = self.ecriture30.render(str("INTERIEUR"), True, couleur, (32, 32, 32)) 
-            VAR.fenetre.blit(image_texte, (0, 0))
+                d = 4
+                if self.CORPS.LIMITE.face == ENUM_DIR.DROITE:
+                    pygame.draw.rect(VAR.fenetre, (0, 0, 255), (xc+ VAR.cellule-d, yc, d, VAR.cellule), 0)   
+                elif self.CORPS.LIMITE.face == ENUM_DIR.GAUCHE:
+                    pygame.draw.rect(VAR.fenetre, (0, 0, 255), (xc, yc, d, VAR.cellule), 0)   
+                elif self.CORPS.LIMITE.face == ENUM_DIR.HAUT:
+                    pygame.draw.rect(VAR.fenetre, (0, 0, 255), (xc, yc, VAR.cellule, d), 0)   
+                elif self.CORPS.LIMITE.face == ENUM_DIR.BAS:
+                    pygame.draw.rect(VAR.fenetre, (0, 0, 255), (xc, yc+VAR.cellule-d, VAR.cellule, d), 0)   
+                
+                if self.CORPS.id_interieur in (1, 2):  
+                    image_texte = self.ecriture30.render("INTERIEUR" + str(self.CORPS.id_interieur), True, couleur, (32, 32, 32)) 
+                    VAR.fenetre.blit(image_texte, (0, 0))
        
         
         

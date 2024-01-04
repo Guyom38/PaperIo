@@ -250,6 +250,9 @@ class CCorps:
             
         
     def trouve_face_interieur(self):
+        if (self.LIMITE.x, self.LIMITE.y) == (-1, -1):
+            return 0
+        
         bord = self.elements[ (self.LIMITE.x, self.LIMITE.y) ]
         id_cote = bord.face[self.LIMITE.face]
         

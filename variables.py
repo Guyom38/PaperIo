@@ -1,7 +1,7 @@
 
 
 resolution_x, resolution_y = 1600, 1000
-cellule = 48
+cellule = 24
 taille_tete = 4
 
 

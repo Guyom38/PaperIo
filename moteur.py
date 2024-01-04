@@ -91,7 +91,7 @@ class CMoteur:
             
             
             self.TERRAIN.afficher()
-            self.JOUEUR.afficher()
+            self.JOUEUR.afficher(2)
            # self.JOUEUR.capture_zone()
            
 
