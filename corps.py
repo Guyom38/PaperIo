@@ -199,9 +199,7 @@ class CBord:
             self.reference = distance
             self.x, self.y = x, y
             self.face = cle
-            print(str( ((self.ref_x, self.ref_y), (x, y), distance, cle)))
-            
-            
+             
             
   
                 

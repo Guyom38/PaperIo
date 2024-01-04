@@ -9,7 +9,89 @@ class CJoueur:
     class CAlgo_Remplissage:
         
         
+        def calcul_contour_zone(self):
+            colorier(self.x, self.y, (128,128,128), 0.1)
             
+            liste_de_points_de_depart = self.chercher_les_contours(self.x, self.y, False)
+            
+            print ("DEPART " + str(liste_de_points_de_depart))
+            liste1 = []
+            liste1.append( (self.x, self.y) )
+            liste1.append( liste_de_points_de_depart[0] )
+            
+            liste2 = []
+            liste2.append( (self.x, self.y) )
+            liste2.append( liste_de_points_de_depart[1] )
+            
+            liste_contour_plus_rapide = self.chacun_son_tour(liste1, liste2)
+            for x, y in liste_contour_plus_rapide:
+                #colorier(x, y, (0,0,0), 0.01)
+                self.CORPS.ajouter_morceau( x, y )
+            
+            #self.afficher(2)
+            #colorier(0, 0, (200, 200, 200), 3)
+            
+            
+        def chacun_son_tour(self, liste1, liste2):
+            tour = 0
+            
+            while True:
+                liste = liste1 if (tour % 2 == 0) else liste2
+                x, y = liste[-1]                
+
+                # prend le dernier element de la liste
+                liste_points_suivants = self.chercher_les_contours(x, y, False)
+                for xd, yd in liste_points_suivants:
+                    if (xd, yd) not in liste:
+                        liste.append( (xd, yd) )
+
+                        # si le contour a atteint le serpent
+                        if (xd, yd) in self.CORPS.elements:
+                            return liste
+                tour += 1
+                    
+            
+        # trouver ou non les voisins
+        def voisin(self, x, y, inverse):
+            zones_recherche =  ( (0, 1), (-1, 0), (1, 0), (0, -1), (-1, -1), (1, -1), (-1, 1), (1, 1) ) if inverse else ( (0, 1), (-1, 0), (1, 0), (0, -1) )
+            
+            liste_points = []            
+            for xd, yd in zones_recherche:
+                if inverse:
+                    ajouter = (x + xd, y + yd) not in self.LISTE_ZONES
+                else:
+                    ajouter = (x + xd, y + yd) in self.LISTE_ZONES
+                
+                if ajouter:
+                    liste_points.append( (x + xd, y + yd) )
+                    
+            return liste_points
+        
+        # trouver les deux points de depart
+        def chercher_les_contours(self, x, y, depart):
+            liste_points = []            
+
+            # cherche voisin
+            liste_voisins = self.voisin(x, y, False)
+            for xd, yd in liste_voisins:
+                #
+                liste_voisins_bords = self.voisin(xd, yd, True)
+                if len(liste_voisins_bords) > 0:
+                    liste_points.append( (xd, yd) )                 
+                        
+            return liste_points
+                    
+                    
+                    
+            
+            
+            
+            
+            
+            
+            
+            
+               
         def capture_zone(self):
             
                 

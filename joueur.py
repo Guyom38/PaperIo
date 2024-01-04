@@ -60,8 +60,8 @@ class CJoueur(CJoueur.CAlgo_Remplissage):
         self.x = random.randint(4, self.MOTEUR.TERRAIN.dimension_x -4)
         self.y = random.randint(4, self.MOTEUR.TERRAIN.dimension_y -4)
         
-        for y in range(-2, 2):
-            for x in range(-2, 2):
+        for y in range(-2, 10):
+            for x in range(-2, 10):
                 if self.MOTEUR.TERRAIN.est_ce_sur_terrain(self.x + x, self.y + y):
                     self.LISTE_ZONES.append( (self.x + x, self.y + y) )
                     
@@ -98,13 +98,28 @@ class CJoueur(CJoueur.CAlgo_Remplissage):
             return
         
         if not (self.x, self.y) in self.LISTE_ZONES:
+            # ajoute la debut de la queue dans la zone
+            if len(self.CORPS.elements) == 0:
+                if self.direction == ENUM_DIR.HAUT:
+                    self.CORPS.ajouter_morceau( self.x, self.y+1 )
+                elif self.direction == ENUM_DIR.BAS:
+                    self.CORPS.ajouter_morceau( self.x, self.y-1 )
+                elif self.direction == ENUM_DIR.DROITE:
+                    self.CORPS.ajouter_morceau( self.x-1, self.y )
+                elif self.direction == ENUM_DIR.GAUCHE:
+                    self.CORPS.ajouter_morceau( self.x+1, self.y )
+            
+            # ajoute le bout de queue en dehors de la zone
             self.CORPS.ajouter_morceau( self.x, self.y )
             
-        else:        
+        else:    
+            # collision avec la zone, detection de capture    
             if len(self.CORPS.elements) > 1:
                 self.CORPS.id_interieur = self.CORPS.trouve_face_interieur()
-        
+
+                self.calcul_contour_zone()
                 self.capture_zone()
+                
                 self.CORPS.regime()
         
     def afficher_faces(self, element, x, y):
